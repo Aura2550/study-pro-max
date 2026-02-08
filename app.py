@@ -39,7 +39,7 @@ with st.sidebar:
 
 if api_key:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-pro') # Using Pro for smarter results
+    model = genai.GenerativeModel('gemini-1.5-flash') # Using Pro for smarter results
 
     # --- 1. PERPLEXITY SEARCH (Deep Research) ---
     if mode == "🌐 Perplexity Search (Deep Research)":
