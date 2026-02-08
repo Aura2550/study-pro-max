@@ -1,57 +1,96 @@
 import streamlit as st
 import google.generativeai as genai
-import time
 
-# --- 1. PAGE & THEME CONFIG ---
-st.set_page_config(page_title="STUDY-PRO BEYOND ULTRA", layout="wide", initial_sidebar_state="expanded")
+# --- 1. ULTIMATE CONFIG ---
+st.set_page_config(page_title="STUDY-PRO BEYOND v7.0", layout="wide")
 
-# --- 2. ADVANCED CSS (Neon Cyberpunk UI) ---
+# --- 2. ELITE CYBERPUNK CSS ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap');
     
-    .stApp { background: radial-gradient(circle at 50% 50%, #0d1117 0%, #010409 100%); color: #c9d1d9; font-family: 'Space Grotesk', sans-serif; }
+    .stApp { background: #050505; color: #e0e0e0; font-family: 'Rajdhani', sans-serif; }
     
-    /* Glowing Title */
-    .glitch-title { font-family: 'Syncopate', sans-serif; font-size: 3.5rem; text-align: center; 
-                    color: #fff; text-shadow: 0 0 10px #58a6ff, 0 0 20px #58a6ff;
-                    background: linear-gradient(90deg, #58a6ff, #bc8cff); -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+    /* Neon Header */
+    .title-container { text-align: center; padding: 20px; border-bottom: 2px solid #00f2fe; margin-bottom: 30px; background: rgba(0,242,254,0.05); }
+    .main-title { font-family: 'Orbitron', sans-serif; font-size: 4rem; font-weight: 900; 
+                  background: linear-gradient(90deg, #00f2fe, #7000ff, #00f2fe);
+                  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                  animation: shine 3s linear infinite; }
+    @keyframes shine { to { background-position: 200% center; } }
 
-    /* Glassmorphism Cards */
-    .glass-card { background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(88, 166, 255, 0.3);
-                  padding: 25px; border-radius: 20px; backdrop-filter: blur(15px);
-                  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); margin-bottom: 20px; transition: 0.3s; }
-    .glass-card:hover { border: 1px solid #58a6ff; box-shadow: 0 0 20px rgba(88, 166, 255, 0.4); transform: translateY(-3px); }
-
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] { background-color: #0d1117 !important; border-right: 1px solid #30363d; }
+    /* Futuristic Cards */
+    .feature-card { background: rgba(15, 15, 15, 0.95); border-left: 5px solid #00f2fe;
+                    padding: 30px; border-radius: 0 20px 20px 0; margin-bottom: 25px;
+                    box-shadow: 10px 10px 30px rgba(0,0,0,0.5); border-top: 1px solid #333; }
     
-    /* Futuristic Buttons */
-    .stButton>button { background: linear-gradient(45deg, #238636, #2ea043); color: white; border: none;
-                        padding: 12px 24px; border-radius: 12px; font-weight: bold; width: 100%;
-                        box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3); transition: 0.4s; }
-    .stButton>button:hover { box-shadow: 0 0 25px #2ea043; transform: scale(1.03); }
+    /* Neon Input & Buttons */
+    .stTextInput>div>div>input { background: #111 !important; color: #00f2fe !important; border: 1px solid #00f2fe !important; font-size: 1.2rem !important; }
+    .stButton>button { background: linear-gradient(45deg, #00f2fe, #7000ff); color: white; border: none;
+                        padding: 15px 40px; border-radius: 5px; font-family: 'Orbitron'; font-weight: bold;
+                        text-transform: uppercase; letter-spacing: 3px; transition: 0.5s; width: 100%; }
+    .stButton>button:hover { box-shadow: 0 0 30px #00f2fe; transform: scale(1.02); }
 
-    /* Inputs */
-    .stTextInput>div>div>input { background: #0d1117 !important; color: white !important; border: 1px solid #30363d !important; border-radius: 10px !important; }
+    [data-testid="stSidebar"] { background-color: #000 !important; border-right: 1px dotted #00f2fe; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. HEADER ---
-st.markdown("<h1 class='glitch-title'>STUDY-PRO BEYOND</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #8b949e; letter-spacing: 2px;'>SYSTEM STATUS: NEURAL LINK ACTIVE</p>", unsafe_allow_html=True)
+# --- 3. CORE SYSTEM INTERFACE ---
+st.markdown("<div class='title-container'><h1 class='main-title'>STUDY-PRO BEYOND</h1><p style='letter-spacing:5px; color:#7000ff;'>V7.0 PLATINUM EDITION</p></div>", unsafe_allow_html=True)
 
-# --- 4. SIDEBAR CONFIG ---
 with st.sidebar:
-    st.markdown("### 🧬 CORE OVERRIDE")
-    api_key = st.text_input("MASTER KEY (API):", type="password", placeholder="Enter Key...")
+    st.markdown("<h2 style='color:#00f2fe; font-family:Orbitron;'>⚡ CORE ACCESS</h2>", unsafe_allow_html=True)
+    api_key = st.text_input("ENTER MASTER KEY:", type="password")
     st.markdown("---")
-    st.markdown("### 🕹️ MODULE SELECT")
-    mode = st.radio("", ["🌐 Deep Research", "📑 Presentation Deck", "📝 Exam Architect", "🗓️ AI Schedule", "📊 Skill Tracker"])
-    st.markdown("---")
-    st.caption("Version: 6.0 Stable (BEYOND)")
+    mode = st.selectbox("COMMAND CENTER", ["🌐 Deep Research", "📑 Slide Architect", "📝 Exam Master", "📅 Study Strat", "🎙️ AI Tutor"])
+    st.success("System Status: Ready")
 
-# --- 5. POWERFULL ENGINE LOGIC (Self-Healing) ---
-def initialize_engine(key):
-    genai.configure(api_key=
+# --- 4. ENGINE LOGIC (FIXED BRACKETS & FALLBACKS) ---
+if api_key:
+    try:
+        genai.configure(api_key=api_key)
+        
+        # Self-healing model selection
+        def connect_brain():
+            models = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro']
+            for m in models:
+                try:
+                    engine = genai.GenerativeModel(m)
+                    engine.generate_content("ping")
+                    return engine
+                except: continue
+            return None
+
+        brain = connect_brain()
+
+        if brain:
+            st.markdown("<div class='feature-card'>", unsafe_allow_html=True)
+            topic = st.text_input("WHAT IS YOUR OBJECTIVE?")
+            execute = st.button("INITIALIZE MISSION")
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            if execute and topic:
+                with st.spinner("Decoding Neural Data..."):
+                    if mode == "🌐 Deep Research":
+                        prompt = f"Advanced PhD level research on {topic} for Class 9. Explain like a genius."
+                    elif mode == "📑 Slide Architect":
+                        prompt = f"10 detailed slides for {topic} presentation with visual cues."
+                    elif mode == "📝 Exam Master":
+                        prompt = f"Grand Test for Class 9 {topic} with Answers."
+                    elif mode == "📅 Study Strat":
+                        prompt = f"Detailed 7-day master plan for {topic}."
+                    else:
+                        prompt = f"Act as a voice tutor. Explain {topic} simply."
+                    
+                    response = brain.generate_content(prompt)
+                    st.markdown("### 📡 NEURAL OUTPUT")
+                    st.markdown(f"<div class='feature-card' style='border-left-color:#7000ff;'>{response.text}</div>", unsafe_allow_html=True)
+        else:
+            st.error("Model Error: Your API key is valid but Google is blocking the connection. Try a different Key.")
+
+    except Exception as e:
+        st.error(f"Critical System Failure: {str(e)}")
+else:
+    st.warning("⚠️ ACCESS DENIED: PLEASE INSERT MASTER KEY IN SIDEBAR")
+
+st.markdown("<p style='text-align: center; color: #444;'>// AURA-2550 // NEURAL LINK STABLE</p>", unsafe_allow_html=True)
