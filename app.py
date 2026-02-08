@@ -1,53 +1,55 @@
 import streamlit as st
 import google.generativeai as genai
-import os
 
-# --- ULTIMATE UI ---
-st.set_page_config(page_title="STUDY-PRO BEYOND v8.0", layout="wide")
+# --- UI CONFIG ---
+st.set_page_config(page_title="STUDY-PRO BEYOND v9.0", layout="wide")
 st.markdown("""<style>
     .stApp { background: #010409; color: white; }
-    .card { background: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 10px; }
+    .result-box { background: #161b22; border: 2px solid #58a6ff; padding: 25px; border-radius: 15px; }
     .title { color: #58a6ff; font-weight: bold; font-size: 3rem; text-align: center; }
 </style>""", unsafe_allow_html=True)
 
-st.markdown("<h1 class='title'>STUDY-PRO BEYOND</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='title'>STUDY-PRO BEYOND (FORCE MODE)</h1>", unsafe_allow_html=True)
 
 with st.sidebar:
     api_key = st.text_input("ENTER MASTER KEY:", type="password")
     mode = st.selectbox("MODULE", ["Research", "Exam", "Slides"])
 
-# --- THE BYPASS LOGIC ---
+# --- BYPASS ENGINE ---
 if api_key:
     try:
-        # Step 1: Clear any old configuration
         genai.configure(api_key=api_key)
         
-        # Step 2: Try models with full naming convention
-        # We use 'gemini-1.5-flash-8b' also, as it's often more available
-        working_model = None
-        for m_name in ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-pro']:
-            try:
-                m = genai.GenerativeModel(m_name)
-                # Force a tiny test response
-                test_check = m.generate_content("hi")
-                if test_check:
-                    working_model = m
-                    break
-            except:
-                continue
+        # 1. DISABLE ALL SAFETY FILTERS (Block hatao)
+        safety_settings = [
+            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+        ]
 
-        if working_model:
-            st.success("⚡ NEURAL LINK ESTABLISHED!")
-            topic = st.text_input("Enter Topic:")
-            if st.button("EXECUTE"):
-                res = working_model.generate_content(f"Explain {topic} for Class 9.")
-                st.markdown(f"<div class='card'>{res.text}</div>", unsafe_allow_html=True)
-        else:
-            # AGAR YAHAN BHI FAIL HUA, TO MASLA CODE MEIN NAHI HAI
-            st.error("🚨 GOOGLE ACCOUNT RESTRICTION: Aapka account ya region is model ko allow nahi kar raha.")
-            st.info("Solution: 1. Google AI Studio mein ja kar ek baar 'Chat' mein kuch likhen. 2. Agar wahan 'Safety Warning' aaye toh use accept karein.")
-            
+        # 2. SELECT MODEL (Try Flash first, then Pro)
+        try:
+            model = genai.GenerativeModel('gemini-1.5-flash', safety_settings=safety_settings)
+            # Test call
+            model.generate_content("hi")
+        except:
+            model = genai.GenerativeModel('gemini-pro', safety_settings=safety_settings)
+
+        st.success("⚡ NEURAL LINK: BYPASS ACTIVE!")
+        
+        topic = st.text_input("Enter Topic (e.g., Structure of Atom):")
+        if st.button("EXECUTE MISSION"):
+            with st.spinner("AI is forcing connection..."):
+                prompt = f"Act as a pro teacher. Explain {topic} for Class 9 student in detail with headings."
+                if mode == "Exam":
+                    prompt = f"Create a Class 9 test for {topic} with answers."
+                
+                res = model.generate_content(prompt)
+                st.markdown(f"<div class='result-box'>{res.text}</div>", unsafe_allow_html=True)
+
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"FATAL ERROR: {e}")
+        st.info("Bhai, agar ab bhi nahi chala, toh iska matlab hai aapki API Key 'Restricted' hai. Ek baar Google AI Studio mein 'Chat' karke dekho, wahan koi Error toh nahi aa raha?")
 else:
-    st.warning("Please enter API Key.")
+    st.warning("Please enter API Key in the sidebar.")
