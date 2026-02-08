@@ -1,56 +1,57 @@
 import streamlit as st
 import google.generativeai as genai
+import time
 
-# --- UI CONFIG ---
-st.set_page_config(page_title="STUDY-PRO ULTRA MAX", layout="wide")
+# --- 1. PAGE & THEME CONFIG ---
+st.set_page_config(page_title="STUDY-PRO BEYOND ULTRA", layout="wide", initial_sidebar_state="expanded")
 
-# --- CSS (Glassmorphism) ---
+# --- 2. ADVANCED CSS (Neon Cyberpunk UI) ---
 st.markdown("""
     <style>
-    .stApp { background: #020617; color: white; }
-    .glass { background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-    .hero { font-size: 3.5rem; color: #22d3ee; text-align: center; font-weight: bold; }
+    @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;500;700&display=swap');
+    
+    .stApp { background: radial-gradient(circle at 50% 50%, #0d1117 0%, #010409 100%); color: #c9d1d9; font-family: 'Space Grotesk', sans-serif; }
+    
+    /* Glowing Title */
+    .glitch-title { font-family: 'Syncopate', sans-serif; font-size: 3.5rem; text-align: center; 
+                    color: #fff; text-shadow: 0 0 10px #58a6ff, 0 0 20px #58a6ff;
+                    background: linear-gradient(90deg, #58a6ff, #bc8cff); -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+
+    /* Glassmorphism Cards */
+    .glass-card { background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(88, 166, 255, 0.3);
+                  padding: 25px; border-radius: 20px; backdrop-filter: blur(15px);
+                  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); margin-bottom: 20px; transition: 0.3s; }
+    .glass-card:hover { border: 1px solid #58a6ff; box-shadow: 0 0 20px rgba(88, 166, 255, 0.4); transform: translateY(-3px); }
+
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] { background-color: #0d1117 !important; border-right: 1px solid #30363d; }
+    
+    /* Futuristic Buttons */
+    .stButton>button { background: linear-gradient(45deg, #238636, #2ea043); color: white; border: none;
+                        padding: 12px 24px; border-radius: 12px; font-weight: bold; width: 100%;
+                        box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3); transition: 0.4s; }
+    .stButton>button:hover { box-shadow: 0 0 25px #2ea043; transform: scale(1.03); }
+
+    /* Inputs */
+    .stTextInput>div>div>input { background: #0d1117 !important; color: white !important; border: 1px solid #30363d !important; border-radius: 10px !important; }
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='hero'>STUDY-PRO ULTRA</h1>", unsafe_allow_html=True)
+# --- 3. HEADER ---
+st.markdown("<h1 class='glitch-title'>STUDY-PRO BEYOND</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #8b949e; letter-spacing: 2px;'>SYSTEM STATUS: NEURAL LINK ACTIVE</p>", unsafe_allow_html=True)
 
-# --- SIDEBAR ---
+# --- 4. SIDEBAR CONFIG ---
 with st.sidebar:
-    api_key = st.text_input("ENTER API KEY:", type="password")
-    mode = st.radio("SELECT FEATURE:", ["Research", "Slide Deck", "Exam Maker"])
+    st.markdown("### 🧬 CORE OVERRIDE")
+    api_key = st.text_input("MASTER KEY (API):", type="password", placeholder="Enter Key...")
+    st.markdown("---")
+    st.markdown("### 🕹️ MODULE SELECT")
+    mode = st.radio("", ["🌐 Deep Research", "📑 Presentation Deck", "📝 Exam Architect", "🗓️ AI Schedule", "📊 Skill Tracker"])
+    st.markdown("---")
+    st.caption("Version: 6.0 Stable (BEYOND)")
 
-# --- SMART MODEL LOADER (Fixes 404 Error) ---
-def get_working_model(key):
-    genai.configure(api_key=key)
-    # List of models to try in order
-    for model_name in ['gemini-pro', 'gemini-1.5-flash', 'gemini-1.5-pro']:
-        try:
-            m = genai.GenerativeModel(model_name)
-            m.generate_content("test") # Test call
-            return m
-        except:
-            continue
-    return None
-
-# --- MAIN LOGIC ---
-if api_key:
-    model = get_working_model(api_key)
-    
-    if model:
-        topic = st.text_input("Enter your Topic (e.g. Newton's Laws):")
-        if st.button("EXECUTE"):
-            with st.spinner("AI is thinking..."):
-                if mode == "Research":
-                    prompt = f"Perform deep research on {topic} for Class 9. Detailed points."
-                elif mode == "Slide Deck":
-                    prompt = f"Create 10 slides outline for {topic}."
-                else:
-                    prompt = f"Create a Class 9 exam for {topic}."
-                
-                res = model.generate_content(prompt)
-                st.markdown(f"<div class='glass'>{res.text}</div>", unsafe_allow_html=True)
-    else:
-        st.error("Model Error: Google is not accepting this key or model name. Please check your API key.")
-else:
-    st.warning("Sidebar mein API Key enter karein.")
+# --- 5. POWERFULL ENGINE LOGIC (Self-Healing) ---
+def initialize_engine(key):
+    genai.configure(api_key=
